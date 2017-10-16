@@ -36,6 +36,9 @@ class Button {
   void draw() {
     fill(this.c);
     rect(x, y, w, h);
+    fill(0);
+    textAlign(CENTER, CENTER);
+    text(this.text, x + w / 2, y + h / 2);
   }
   
   boolean isOver() {
