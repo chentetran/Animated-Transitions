@@ -4,7 +4,7 @@ abstract class Chart {
   DataTable tbl;
   float x, y, w, h;
   color on, off;
-  private ArrayList<DataViz> dvs;
+  protected ArrayList<DataViz> dvs;
   private color c;
   
   Chart(DataTable tbl, float x, float y, float w, float h, color on, color off) {
@@ -36,7 +36,17 @@ class BarChart extends Chart {
   }
   
   void makeDataVizs() {
+    float gapSize = this.w / this.tbl.data.size();
+    float rectWidth = .8 * gapSize;
+    float xStart = this.x + (gapSize - rectWidth) / 2;
+    float heightRatio = this.h / super.getAxisMax(0);
     
+    for (int i = 0; i < this.tbl.data.size(); i++) {
+      float rectHeight = this.tbl.data.get(i).values.get(0) * heightRatio;
+      PShape bar = createShape(RECT, xStart + gapSize * i, y + h - rectHeight, rectWidth, rectHeight);
+      DataViz dataViz = new DataViz(this.tbl.data.get(i), bar);
+      this.dvs.add(dataViz);
+    }
   }
   
   void drawEmbellishments() {
@@ -60,37 +70,27 @@ class BarChart extends Chart {
       String tickStr = String.format("%.2f", tickVal);
       text(tickStr, this.x - 10 - textWidth(tickStr), tickY + fontH / 2 - 3);
     }
+    
+    // x labels
+    for (int i = 0; i < this.tbl.data.size(); i++) {
+      fill(0);
+      float labelX = this.x + ((i + 0.3) * this.w/tbl.data.size());
+      float labelY = this.y + this.h + 10; 
+      pushMatrix();
+      translate(labelX, labelY);
+      rotate(PI / 4.0);
+      text(this.tbl.data.get(i).label, 0, 0);
+      popMatrix();
+    }
+    
+    
+    
+    
   }
   
   void drawData() {
+    for (DataViz viz : dvs) {
+      viz.draw();
+    }
   }
 }
-//class BarChart implements Chart {
-//  void drawEmbellishments() {
-    
-//  }
-  
-//  void drawData() {
-    
-//  }
-//}
-
-//class LineChart implements Chart {
-//  void drawEmbellishments() {
-    
-//  }
-    
-//  void drawData() {
-    
-//  }
-//}
-
-//class PieChart implements Chart {
-//  void drawEmbellishments() {
-    
-//  }
-    
-//  void drawData() {
-    
-//  }
-//}
