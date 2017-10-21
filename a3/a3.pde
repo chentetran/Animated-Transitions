@@ -2,8 +2,8 @@ Chart chart = null;
 
 void setup() {
   size(1024, 768);
-  //File f = new File("/home/charlw/Comp/comp177/a3/a3/data.csv");
-  File f = new File("/Users/vincenttran/Desktop/Animated-Transitions/a3/data.csv");
+  File f = new File("/home/charlw/Comp/comp177/a3/a3/data.csv");
+  //File f = new File("/Users/vincenttran/Desktop/Animated-Transitions/a3/data.csv");
   parseData(f);
   //selectInput("Choose file to parse", "parseData");
 }
@@ -34,6 +34,6 @@ void drawButtons() {
 
 void parseData(File f) {
   DataTable tbl = new DataTable(f.getAbsolutePath());
-  chart = new BarChart(tbl, 0.2*width, 0.2*height, 0.6*width, 0.6*height, color(0, 0, 0), color(255, 255, 255));
+  chart = new LineChart(tbl, 0.2*width, 0.2*height, 0.6*width, 0.6*height, color(0, 0, 0), color(255, 255, 255));
   chart.makeDataVizs();
 }
