@@ -8,6 +8,6 @@ class DataViz {
   }
   
   void draw() {
-    shape(this.shape);
+    shape(this.shape); 
   } 
 }

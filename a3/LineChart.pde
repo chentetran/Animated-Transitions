@@ -1,4 +1,4 @@
-final float PTRADIUS = 5;
+final float MRK_WIDTH = 10;
 
 class LineChart extends AxisChart {
   LineChart(DataTable tbl, float x, float y, float w, float h, color on, color off) {
@@ -22,8 +22,9 @@ class LineChart extends AxisChart {
   void makeDataVizs() {
     float yMax = super.getAxisMax(0);
     for (int i = 0; i < this.tbl.data.size(); i++) {
-      PShape dot = createShape(ELLIPSE, getPtX(i), getPtY(i, yMax), PTRADIUS * 2, PTRADIUS * 2);
-      DataViz dataViz = new DataViz(this.tbl.data.get(i), dot);
+      //PShape dot = createShape(ELLIPSE, getPtX(i), getPtY(i, yMax), PTRADIUS * 2, PTRADIUS * 2);
+      PShape marker = makeMarker(getPtX(i), getPtY(i, yMax), MRK_WIDTH, MRK_WIDTH);
+      DataViz dataViz = new DataViz(this.tbl.data.get(i), marker);
       this.dvs.add(dataViz);
     }
   }
@@ -37,5 +38,17 @@ class LineChart extends AxisChart {
       float x2 = getPtX(i+1), y2 = getPtY(i+1, yMax);
       line(x1, y1, x2, y2);
     }
+  }
+  
+  PShape makeMarker(float x, float y, float w, float h) {
+    PShape marker = createShape();
+    marker.beginShape();
+    marker.fill(255);
+    marker.vertex(x, y - h/2);
+    marker.vertex(x + w/2, y);
+    marker.vertex(x, y + h/2);
+    marker.vertex(x - w/2, y);    
+    marker.endShape(CLOSE);
+    return marker; 
   }
 }
