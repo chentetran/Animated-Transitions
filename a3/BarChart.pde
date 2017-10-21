@@ -11,8 +11,9 @@ class BarChart extends AxisChart {
     
     for (int i = 0; i < this.tbl.data.size(); i++) {
       float rectHeight = this.tbl.data.get(i).values.get(0) * heightRatio;
-      PShape bar = createShape(RECT, xStart + gapSize * i, y + h - rectHeight, rectWidth, rectHeight);
-      DataViz dataViz = new DataViz(this.tbl.data.get(i), bar);
+      //PShape bar = createShape(RECT, xStart + gapSize * i, y + h - rectHeight, rectWidth, rectHeight);
+      //DataViz dataViz = new DataViz(this.tbl.data.get(i), bar);
+      DataViz dataViz = new DataViz(this.tbl.data.get(i), xStart + gapSize * i, y + h - rectHeight, rectWidth, rectHeight, Shape.RECTANGLE);
       this.dvs.add(dataViz);
     }
   }

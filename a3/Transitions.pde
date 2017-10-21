@@ -1,4 +1,7 @@
-static abstract class Transitions {
-  
+static abstract class Transitions {  
+  //boolean barToLine(PShape currentShape, PShape targetShape) {
+    
+    
+  //}
   
 }

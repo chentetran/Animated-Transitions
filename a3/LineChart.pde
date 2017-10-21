@@ -23,7 +23,8 @@ class LineChart extends AxisChart {
     float yMax = super.getAxisMax(0);
     for (int i = 0; i < this.tbl.data.size(); i++) {
       PShape dot = createShape(ELLIPSE, getPtX(i), getPtY(i, yMax), PTRADIUS * 2, PTRADIUS * 2);
-      DataViz dataViz = new DataViz(this.tbl.data.get(i), dot);
+      //DataViz dataViz = new DataViz(this.tbl.data.get(i), dot);
+      DataViz dataViz = new DataViz(this.tbl.data.get(i), getPtX(i), getPtY(i, yMax), PTRADIUS * 2, PTRADIUS * 2, Shape.CIRCLE);
       this.dvs.add(dataViz);
     }
   }

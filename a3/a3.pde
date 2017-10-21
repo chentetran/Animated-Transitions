@@ -2,8 +2,8 @@ Chart chart = null;
 
 void setup() {
   size(1024, 768);
-  File f = new File("/home/charlw/Comp/comp177/a3/a3/data.csv");
-  //File f = new File("/Users/vincenttran/Desktop/Animated-Transitions/a3/data.csv");
+  //File f = new File("/home/charlw/Comp/comp177/a3/a3/data.csv");
+  File f = new File("/Users/vincenttran/Desktop/Animated-Transitions/a3/data.csv");
   parseData(f);
   //selectInput("Choose file to parse", "parseData");
 }
