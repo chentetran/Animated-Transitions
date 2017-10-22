@@ -5,9 +5,10 @@ abstract class AxisChart extends Chart {
   
   abstract void makeDataVizs();
   
-  void drawEmbellishments() {
+  void drawEmbellishments(float n) {
     float fontH = textAscent() + textDescent();
-    fill(0);
+    stroke((1.0 - n) * 255);
+    fill((1.0 - n) * 255);
     
     // axis
     line(this.x, this.y+this.h, this.x+this.w, this.y+this.h);
@@ -29,7 +30,6 @@ abstract class AxisChart extends Chart {
     
     // x labels
     for (int i = 0; i < this.tbl.data.size(); i++) {
-      fill(0);
       float labelX = this.x + ((i + 0.3) * this.w/tbl.data.size());
       float labelY = this.y + this.h + 10; 
       pushMatrix();

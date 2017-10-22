@@ -29,8 +29,8 @@ class LineChart extends AxisChart {
     }
   }
   
-  void drawEmbellishments() {
-    super.drawEmbellishments();
+  void drawEmbellishments(float opacity) {
+    super.drawEmbellishments(opacity);
     
     float yMax = super.getAxisMax(0);
     for (int i = 0; i < tbl.data.size() - 1; i++) {

@@ -1,40 +1,36 @@
 Chart chart = null;
-DataTable tbl;
+BarChart bchart = null;
+LineChart lchart = null;
 final Transitions transitions = new Transitions();
+final int TNUM = 80;
 
 int i = 0;
-ArrayList<ArrayList<PShape>> tFrames;
+ArrayList<PShape> tFrames;
 
 void setup() {
   size(1024, 768);
-  //File f = new File("/home/charlw/Comp/comp177/a3/a3/data.csv");
-  File f = new File("/Users/vincenttran/Desktop/Animated-Transitions/a3/data.csv");
+  File f = new File("/home/charlw/Comp/comp177/a3/a3/data.csv");
+  //File f = new File("/Users/vincenttran/Desktop/Animated-Transitions/a3/data.csv");
   parseData(f);
   //selectInput("Choose file to parse", "parseData");
-  Chart lineChart = new LineChart(tbl, 0.2*width, 0.2*height, 0.6*width, 0.6*height, color(0, 0, 0), color(255, 255, 255));
-  lineChart.makeDataVizs();
-  Chart barChart = new BarChart(tbl, 0.2*width, 0.2*height, 0.6*width, 0.6*height, color(0, 0, 0), color(255, 255, 255));
-  barChart.makeDataVizs();
-  tFrames = new ArrayList<ArrayList<PShape>>();
-  for (int i = 0; i < barChart.dvs.size(); i++) {
-    PShape bar = barChart.dvs.get(i).shape;
-    PShape marker = lineChart.dvs.get(i).shape;
-    tFrames.add(transitions.barToLine(bar, marker, 50));
-  }
+  //tFrames = transitions.barsToMarkers(bchart.dvs, lchart.dvs, TNUM);
+  tFrames = transitions.markersToBars(lchart.dvs, bchart.dvs, TNUM);
 }
 
 
 
 void draw() {
   background(255);
-  if (i < tFrames.get(0).size()-1) {
-    for (ArrayList<PShape> frames : tFrames) shape(frames.get(i));
+  if (i < tFrames.size()-1) {
+    transitions.lineToBar(lchart, bchart, i, TNUM);
+    shape(tFrames.get(i));
     i++;
   } else {
-    for (ArrayList<PShape> frames : tFrames) shape(frames.get(frames.size()-1));
+    transitions.lineToBar(lchart, bchart, TNUM, TNUM);
+    shape(tFrames.get(tFrames.size()-1));
   }
   //if (chart != null) {
-  //  chart.drawEmbellishments();
+  //  chart.drawEmbellishments(0.5);
   //  chart.drawData();
   //}
   
@@ -56,7 +52,10 @@ void drawButtons() {
 }
 
 void parseData(File f) {
-  tbl = new DataTable(f.getAbsolutePath());
-  chart = new BarChart(tbl, 0.2*width, 0.2*height, 0.6*width, 0.6*height, color(0, 0, 0), color(255, 255, 255));
-  chart.makeDataVizs();
+  DataTable tbl = new DataTable(f.getAbsolutePath());
+  bchart = new BarChart(tbl, 0.2*width, 0.2*height, 0.6*width, 0.6*height, color(0, 0, 0), color(255, 255, 255));
+  bchart.makeDataVizs();
+  lchart = new LineChart(tbl, 0.2*width, 0.2*height, 0.6*width, 0.6*height, color(0, 0, 0), color(255, 255, 255));
+  lchart.makeDataVizs();
+  chart = bchart;
 }

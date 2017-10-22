@@ -4,7 +4,7 @@ abstract class Chart {
   DataTable tbl;
   float x, y, w, h;
   color on, off;
-  protected ArrayList<DataViz> dvs;
+  ArrayList<DataViz> dvs;
   private color c;
   
   Chart(DataTable tbl, float x, float y, float w, float h, color on, color off) {
@@ -26,6 +26,6 @@ abstract class Chart {
   }
   
   abstract void makeDataVizs();
-  abstract void drawEmbellishments();
+  abstract void drawEmbellishments(float opacity); // opacity is a ratio
   abstract void drawData();
 }
