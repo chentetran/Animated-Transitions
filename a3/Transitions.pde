@@ -47,6 +47,7 @@ class Transitions {
     for (int i = 0; i < shrinkN; i++) {
       PShape transitionShape = copyPShape(begin);
       PVector v2 = transitionShape.getVertex(2), v3 = transitionShape.getVertex(3);
+      transitionShape.setFill(255);
       transitionShape.setVertex(2, v2.x, v2.y - deltaH * i);
       transitionShape.setVertex(3, v3.x, v3.y - deltaH * i);
       phases.add(transitionShape);
@@ -65,6 +66,7 @@ class Transitions {
     for (int i = 0; i < chgN; i++) {
       PShape tShp = copyPShape(flat);
       PVector v0 = tShp.getVertex(0), v1 = tShp.getVertex(1), v2 = tShp.getVertex(2), v3 = tShp.getVertex(3);
+      tShp.setFill(255);
       tShp.setVertex(0, v0.x + i * deltaBW, v0.y - i * deltaH);
       tShp.setVertex(1, v1.x - i * deltaW, v1.y);
       tShp.setVertex(2, v2.x - i * deltaBW, v2.y + i * deltaH);
