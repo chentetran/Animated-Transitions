@@ -4,8 +4,9 @@ LineChart lchart = null;
 final Transitions transitions = new Transitions();
 final int TNUM = 80;
 
+ChartMode chartMode;
+
 ArrayList<Button> buttons;
-boolean inTransition = false;
 
 int i = 0;
 ArrayList<PShape> tFrames;
@@ -27,8 +28,6 @@ void setup() {
   buttons.add(new Button(startingX, startingY*3, 100.0, 100, "Pie Chart", clickable, unclickable, null));
   
   //selectInput("Choose file to parse", "parseData");
-  //tFrames = transitions.barsToMarkers(bchart.dvs, lchart.dvs, TNUM);
-  //tFrames = transitions.markersToBars(lchart.dvs, bchart.dvs, TNUM);
 }
 
 
@@ -44,15 +43,28 @@ void draw() {
   }
   
   if (i < tFrames.size()-1) {
-    transitions.lineToBar(lchart, bchart, i, TNUM);
+    transitionEmbellishments();
     shape(tFrames.get(i));
     i++;
   } else {
-    transitions.lineToBar(lchart, bchart, TNUM, TNUM);
     chart.drawEmbellishments(1);
     shape(tFrames.get(tFrames.size()-1));
   }
+}
 
+void transitionEmbellishments() {
+  switch (chartMode) {
+    case Bar:
+      transitions.lineToBar(lchart, bchart, i, TNUM);
+      break;
+    case Line:
+      transitions.barToLine(bchart, lchart, i, TNUM);
+      break;
+    
+    default:      // Pie
+    
+  }
+  
 }
 
 void drawButtons() {
@@ -72,13 +84,13 @@ void mouseClicked() {
 
 void startTransition(String targetChart) {
   i = 0;
-  inTransition = true;
   
   switch (targetChart) { 
     case "Line Chart":
       for (int i = 0; i < chart.dvs.size(); i++) {
         tFrames = transitions.barsToMarkers(bchart.dvs, lchart.dvs, TNUM);
         chart = lchart;
+        chartMode = ChartMode.Line;
       }
       break;
         
@@ -86,6 +98,7 @@ void startTransition(String targetChart) {
       for (int i = 0; i < chart.dvs.size(); i++) {
         tFrames = transitions.markersToBars(lchart.dvs, bchart.dvs, TNUM);
         chart = bchart;
+        chartMode = ChartMode.Bar;
       }
       break;
     
@@ -101,4 +114,9 @@ void parseData(File f) {
   lchart = new LineChart(tbl, 0.2*width, 0.2*height, 0.6*width, 0.6*height, color(0, 0, 0), color(255, 255, 255));
   lchart.makeDataVizs();
   chart = bchart;
+  chartMode = ChartMode.Bar;
+}
+
+enum ChartMode {
+  Bar, Line, Pie 
 }
