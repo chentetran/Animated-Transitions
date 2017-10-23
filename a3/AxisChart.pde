@@ -40,6 +40,10 @@ abstract class AxisChart extends Chart {
     }
   }
   
+  void drawEmbellishments(int x, int n) {
+      
+  }
+  
   void drawData() {
     for (DataViz viz : dvs) {
       viz.draw();

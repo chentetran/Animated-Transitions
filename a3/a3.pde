@@ -43,10 +43,11 @@ void draw() {
   }
   
   if (i < tFrames.size()-1) {
-    transitionEmbellishments();
     shape(tFrames.get(i));
+    chart.drawEmbellishments(i, TNUM);
     i++;
   } else {
+    //transitionEmbellishments();
     chart.drawEmbellishments(1);
     shape(tFrames.get(tFrames.size()-1));
   }
@@ -58,7 +59,7 @@ void transitionEmbellishments() {
       transitions.lineToBar(lchart, bchart, i, TNUM);
       break;
     case Line:
-      transitions.barToLine(bchart, lchart, i, TNUM);
+      transitions.barToLine(bchart, lchart, i - tFrames.size(), TNUM);
       break;
     
     default:      // Pie

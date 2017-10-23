@@ -22,9 +22,12 @@ class Transitions {
   void barToLine(BarChart bchart, LineChart lchart, int i, int n) {
     float fctr = n * BLFACT;
     if (i <= fctr) {
-      bchart.drawEmbellishments((fctr - i) / fctr);
+      bchart.drawEmbellishments(i, n);
+    //  bchart.drawEmbellishments((fctr - i) / fctr);
     } else {
-      lchart.drawEmbellishments((i - fctr) / (n - fctr));
+      print("here");
+      lchart.drawEmbellishments(i, n);
+    //  lchart.drawEmbellishments((i - fctr) / (n - fctr));
     }
   }
   
@@ -85,7 +88,7 @@ class Transitions {
     } else {
       bchart.drawEmbellishments((i - fctr) / (n - fctr));
     }
-  }
+  } 
   
   ArrayList<PShape> markersToBars(ArrayList<DataViz> markers, ArrayList<DataViz> bars, int n) {
     ArrayList<ArrayList<PShape>> allPhases = new ArrayList<ArrayList<PShape>>();

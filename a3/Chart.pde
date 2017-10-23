@@ -27,5 +27,6 @@ abstract class Chart {
   
   abstract void makeDataVizs();
   abstract void drawEmbellishments(float opacity); // opacity is a ratio
+  abstract void drawEmbellishments(int i, int n);
   abstract void drawData();
 }

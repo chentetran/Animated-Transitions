@@ -29,14 +29,25 @@ class LineChart extends AxisChart {
     }
   }
   
-  void drawEmbellishments(float opacity) {
-    super.drawEmbellishments(opacity);
+  //void drawEmbellishments(float opacity) {
+  //  super.drawEmbellishments(opacity);
     
+  //  float yMax = super.getAxisMax(0);
+  //  for (int i = 0; i < tbl.data.size() - 1; i++) {
+  //    float x1 = getPtX(i), y1 = getPtY(i, yMax);
+  //    float x2 = getPtX(i+1), y2 = getPtY(i+1, yMax);
+  //    line(x1, y1, x2, y2);
+  //  }
+  //} 
+  
+  void drawEmbellishments(int i, int n) {
     float yMax = super.getAxisMax(0);
-    for (int i = 0; i < tbl.data.size() - 1; i++) {
-      float x1 = getPtX(i), y1 = getPtY(i, yMax);
-      float x2 = getPtX(i+1), y2 = getPtY(i+1, yMax);
-      line(x1, y1, x2, y2);
+    float lerpRatio = float(i) / n;
+    println(lerpRatio);
+    for (int j = 0; j < tbl.data.size() - 1; j++) {
+      float x1 = getPtX(j), y1 = getPtY(j, yMax);
+      float x2 = getPtX(j+1), y2 = getPtY(j+1, yMax);
+      line(x1, y1, lerp(x1, x2, lerpRatio), lerp(y1, y2, lerpRatio));
     }
   }
   
