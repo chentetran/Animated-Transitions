@@ -3,14 +3,15 @@ Chart chart = null;
 BarChart bchart = null;
 LineChart lchart = null;
 PieChart pchart = null;
+Button lastClicked = null;
 final int AXIS = 0;
 
 int i = 0;
 final int TFRAMES = 200;
 Chart target = null;
 
-final color BTN_ON = color(100, 100, 100);
-final color BTN_OFF = color(200, 200, 200);
+final color BTN_ON = #64B5F6;
+final color BTN_OFF = #BBDEFB;
 ArrayList<Button> btns = new ArrayList<Button>(); // bar, line, pie
 
 class ToBarChart implements ButtonCallback {
@@ -28,9 +29,11 @@ class ToPieChart implements ButtonCallback {
 void setup() {
   size(1024, 768);
   
-  File f = new File("/home/charlw/Comp/comp177/a3/a3/data.csv");
+  File f = new File("/Users/vincenttran/Desktop/Animated-Transitions/a3/data.csv");
   parseData(f);
-  btns.add(new Button(0.8*width, 0.1*height, 0.1*width, 0.133*height, "Bar Chart", BTN_ON, BTN_OFF, new ToBarChart()));
+  Button initialSelected = new Button(0.8*width, 0.1*height, 0.1*width, 0.133*height, "Bar Chart", BTN_ON, BTN_OFF, new ToBarChart());
+  lastClicked = initialSelected;            // initial chart is bar chart
+  btns.add(initialSelected);
   btns.add(new Button(0.8*width, 0.433*height, 0.1*width, 0.133*height, "Line Chart", BTN_ON, BTN_OFF, new ToLineChart()));
   btns.add(new Button(0.8*width, 0.766*height, 0.1*width, 0.133*height, "Pie Chart", BTN_ON, BTN_OFF, new ToPieChart()));
 }
@@ -48,16 +51,26 @@ void draw() {
       chart.drawVisuals();
     }
   }
-  for (Button b : btns) b.draw();
+  for (Button b : btns) {
+    if (chart != target || b == lastClicked) {
+      b.setEnability(false);     // in transition
+    } else {
+      b.setEnability(true); 
+    }
+    
+    b.draw();
+  }
 }
+
+
 
 void parseData(File f) {
   tbl = new DataTable(f.getAbsolutePath());
   bchart = new BarChart(tbl, 0.1*width, 0.2*height, 0.6*width, 0.6*height);
   lchart = new LineChart(tbl, 0.1*width, 0.2*height, 0.6*width, 0.6*height);
   pchart = new PieChart(tbl, 0.1*width, 0.2*height, 0.6*width, 0.6*height);
-  chart = lchart;
-  target = lchart;
+  chart = bchart;
+  target = bchart;
 }
 
 void transition() {
@@ -89,7 +102,10 @@ void transition() {
 
 void mouseClicked() {
   for (Button b : btns) {
-    if (b.isOver()) b.onClick();
+    if (chart == target && b.isOver()) {
+      b.onClick();
+      lastClicked = b;
+    } 
   }
 }
 
