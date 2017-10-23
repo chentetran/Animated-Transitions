@@ -15,6 +15,7 @@ class Bar extends Visual {
   }
   
   void toMarker(Visual marker, int i, int n) {
+    setColor();
     int sN = int(0.85 * n); // shrink
     int mN = n - sN; // line to marker
     float tX = x + (marker.x - (x + w / 2)) * (i / (float)n);
@@ -33,6 +34,7 @@ class Bar extends Visual {
   }
   
   void toSlice(Visual slice, int i, int n) {
+    setColor();
     int lN = int(0.2 * n); // bar to line
     int mN = int(0.3 * n); // move line
     int bN = int(0.2 * n); // bend line

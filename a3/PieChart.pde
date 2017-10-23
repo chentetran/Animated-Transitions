@@ -16,9 +16,6 @@ class PieChart extends Chart {
     }
   }
   
-  void fadeIn(int i, int n) {
-  }
-  
-  void fadeOut(int i, int n) {
-  }
+  void fadeIn(int i, int n) {}
+  void fadeOut(int i, int n) {}
 }

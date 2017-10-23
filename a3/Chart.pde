@@ -3,6 +3,7 @@ abstract class Chart {
   float x, y, w, h;
   ArrayList<Visual> vs;
   PShape shape = null;
+  ArrayList<TextInfo> txts;
   
   Chart(DataTable _tbl, float _x, float _y, float _w, float _h) {
     tbl = _tbl;
@@ -10,20 +11,25 @@ abstract class Chart {
     y = _y;
     w = _w;
     h = _h;
-    vs = new ArrayList<Visual>(); // temp
+    vs = new ArrayList<Visual>();
+    txts = new ArrayList<TextInfo>();
     makeShape();
     makeVisuals();
   }
   
   void drawEmbellishments() {
-    stroke(0);
-    fill(255);
     if (shape != null) shape(shape);
+    for (TextInfo txt : txts) {
+      fill(txt.c);
+      pushMatrix();
+      translate(txt.x, txt.y);
+      rotate(txt.a);
+      text(txt.s, 0, 0);
+      popMatrix();
+    }
   }
   
   void drawVisuals() {
-    stroke(0);
-    fill(255);
     for (Visual v : vs) v.draw();
   }
   

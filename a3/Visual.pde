@@ -13,6 +13,11 @@ abstract class Visual {
     if (shape != null) shape(shape);
   }
   
+  void setColor() {
+    stroke(0);
+    fill(255);
+  }
+  
   abstract void makeShape();
   abstract void toBar(Visual bar, int i, int n);
   abstract void toMarker(Visual marker, int i, int n);

@@ -35,6 +35,7 @@ class LineChart extends Chart {
     int aN = int(n * 0.4); // axis
     int tN = int(n * 0.1); // ticks
     int lN = n - aN - tN; // lines
+    txts.clear();
     PShape grp = createShape(GROUP);
     // axis
     float aW = i < aN ? w * i / (float)aN : w;
@@ -43,10 +44,21 @@ class LineChart extends Chart {
     grp.addChild(createShape(LINE, x, y + h - aH, x, y + h)); // y axis
     // y ticks
     if (i > aN) {
-      float tW = i < aN + tN ? TICKLEN * (i - aN) / (float)tN : TICKLEN;
+      float ratio = (i - aN) < tN ? (i - aN) / (float)tN : 1;
+      float fontH = textAscent() + textDescent();
+      color fontClr = int(255 * (1 - ratio));
+      float yMax = tbl.getAxisMax(AXIS);
+      float tW = TICKLEN * ratio;
       for (int j = 0; j < GAPS + 1; j++) {
         float tY = y + h * j / GAPS;
         grp.addChild(createShape(LINE, x - tW, tY, x, tY));
+        String tStr = String.format("%.2f", yMax - (yMax * j / GAPS));
+        txts.add(new TextInfo(tStr, x - TICKLEN - textWidth(tStr) - 5, tY + fontH / 2 - 3, 0, fontClr));
+      }
+      for (int j = 0; j < tbl.data.size(); j++) {
+        float labelX = x + ((j + 0.3) * w/tbl.data.size());
+        float labelY = y + h + 10;
+        txts.add(new TextInfo(tbl.data.get(j).label, labelX, labelY, PI / 4, fontClr));
       }
     }
     // lines
@@ -62,32 +74,6 @@ class LineChart extends Chart {
   }
   
   void fadeOut(int i, int n) {
-    int lN = int(n * 0.5);
-    int tN = int(n * 0.1); // ticks
-    int aN = n - lN - tN; // axis
-    PShape grp = createShape(GROUP);
-    // lines
-    if (i <= lN) {
-      float yMax = tbl.getAxisMax(0);
-      for (int j = 0; j < tbl.data.size() - 1; j++) {
-        float x1 = getPtX(j), x2 = getPtX(j+1), y1 = getPtY(j, yMax), y2 = getPtY(j+1, yMax);
-        float xDiff = x2 - x1, yDiff = y2 - y1, diffRatio = (lN - i) / (float)lN;
-        grp.addChild(createShape(LINE, x1, y1, x1 + xDiff * diffRatio, y1 + yDiff * diffRatio));
-      }
-    }
-    // ticks
-    if (i <= lN + tN) {
-      float tW = i <= lN ? TICKLEN : TICKLEN * (lN + tN - i) / (float)tN;
-      for (int j = 0; j < GAPS + 1; j++) {
-        float tY = y + h * j / GAPS;
-        grp.addChild(createShape(LINE, x - tW, tY, x, tY));
-      }
-    }
-    // axis
-    float aW = i > tN + lN ? w * (aN - (i - tN - lN)) / (float)aN : w;
-    float aH = i > tN + lN ? h * (aN - (i - tN - lN)) / (float)aN : h;
-    grp.addChild(createShape(LINE, x, y + h, x + aW, y + h)); // x axis
-    grp.addChild(createShape(LINE, x, y + h - aH, x, y + h)); // y axis
-    shape = grp;
+    fadeIn(n - i, n);
   }
 }

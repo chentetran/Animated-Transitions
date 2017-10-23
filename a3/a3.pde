@@ -56,8 +56,8 @@ void parseData(File f) {
   bchart = new BarChart(tbl, 0.1*width, 0.2*height, 0.6*width, 0.6*height);
   lchart = new LineChart(tbl, 0.1*width, 0.2*height, 0.6*width, 0.6*height);
   pchart = new PieChart(tbl, 0.1*width, 0.2*height, 0.6*width, 0.6*height);
-  chart = bchart;
-  target = bchart;
+  chart = lchart;
+  target = lchart;
 }
 
 void transition() {

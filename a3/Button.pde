@@ -42,7 +42,7 @@ class Button {
     fill(c);
     rect(x, y, w, h);
     fill(0);
-    textAlign(CENTER, CENTER);
-    text(text, x + w / 2, y + h / 2);
+    float tWid = textWidth(text);
+    text(text, x + (w - tWid) / 2, y + h / 2);
   }
 }

@@ -32,6 +32,7 @@ class Slice extends Visual {
   }
   
   void toBar(Visual bar, int i, int n) {
+    setColor();
     int pN = int(0.5 * n); // to polygon
     int mN = int(0.3 * n); // move cbords
     int bN = n - pN - mN; // line to bar
@@ -61,6 +62,7 @@ class Slice extends Visual {
   }
   
   void toMarker(Visual marker, int i, int n) {
+    setColor();
     int pN = int(0.5 * n); // to polygon
     int mN = int(0.3 * n); // move chords
     int lN = int(0.1 * n); // expand line
