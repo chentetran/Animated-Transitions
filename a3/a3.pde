@@ -27,11 +27,12 @@ class ToPieChart implements ButtonCallback {
   void callback() { target = pchart; }
 }
 
+DataPoint tooltip = null;
+
 void setup() {
   size(1024, 768);
   
-  File f = new File("/Users/vincenttran/Desktop/Animated-Transitions/a3/data.csv");
-  parseData(f);
+  selectInput("Choose a data file", "parseData");
   Button initialSelected = new Button(0.8*width, 0.1*height, 0.1*width, 0.133*height, "Bar Chart", BTN_ON, BTN_OFF, new ToBarChart());
   lastClicked = initialSelected;            // initial chart is bar chart
   btns.add(initialSelected);
@@ -44,18 +45,22 @@ void setup() {
 void draw() {
   background(255);
   stroke(0);
-  mouseOff();
-  mouseOver();
+  
   
   if (chart != null) {
+    mouseOff();
+    mouseOver();
+    
     if (chart != target) {      // in transition
       transition();
       scrollbar.setEnability(false);
     } else {
+      chart.makeShape();
       chart.drawEmbellishments();
-      chart.drawVisuals();
       scrollbar.setEnability(true);
     }
+    chart.drawVisuals();
+    if (tooltip != null) drawTooltip();
   }
   for (Button b : btns) {
     if (chart != target || b == lastClicked) {
@@ -65,17 +70,19 @@ void draw() {
     }
     
     b.draw();
+    
+    scrollbar.update();
+    scrollbar.display();
   }
   
-  scrollbar.update();
-  scrollbar.display();
+  
 }
 
 void parseData(File f) {
   tbl = new DataTable(f.getAbsolutePath());
-  bchart = new BarChart(tbl, 0.1*width, 0.2*height, 0.6*width, 0.6*height);
-  lchart = new LineChart(tbl, 0.1*width, 0.2*height, 0.6*width, 0.6*height);
-  pchart = new PieChart(tbl, 0.1*width, 0.2*height, 0.6*width, 0.6*height);
+  bchart = new BarChart(tbl, 0.1*width, 0.2*height, 0.6*width, 0.6*height, BTN_ON, BTN_OFF);
+  lchart = new LineChart(tbl, 0.1*width, 0.2*height, 0.6*width, 0.6*height, BTN_ON, BTN_OFF);
+  pchart = new PieChart(tbl, 0.1*width, 0.2*height, 0.6*width, 0.6*height, BTN_ON, BTN_OFF);
   chart = bchart;
   target = bchart;
 }
@@ -88,7 +95,6 @@ void transition() {
     chart.makeVisuals(); // reset shapes
     chart = target;
     chart.drawEmbellishments();
-    chart.drawVisuals();
     return;
   }
   if (i <= tframes / 2) {
@@ -105,9 +111,21 @@ void transition() {
   } else {
     chart.visualsToSlices(pchart, i, tframes);
   }
-  chart.drawVisuals();
   if (i <= tframes) i++;
 }
+
+void drawTooltip() {
+  String txt = tooltip.label + ", " + String.valueOf(tooltip.values.get(AXIS));
+  float bW = textWidth(txt) + BORDER;
+  float bH = textAscent() + textDescent() + BORDER;
+  float bX = mouseX;
+  float bY = mouseY - bH;
+  fill(255);
+  rect(bX, bY, bW, bH);
+  fill(0);
+  text(txt, bX + BORDER / 2, bY + BORDER);
+}
+
 
 void mouseClicked() {
   for (Button b : btns) {
@@ -119,13 +137,17 @@ void mouseClicked() {
 }
 
 void mouseOver() {
-  for (Button b : btns) {
-    if (b.isOver()) b.onOver();
+  for (Button b : btns) if (b.isOver()) b.onOver();
+  tooltip = null;
+  for (Visual v : chart.vs) {
+    if (v.isOver() && chart == target) {
+      v.onOver();
+      tooltip = v.pt;
+    }
   }
 }
 
 void mouseOff() {
-  for (Button b : btns) {
-    if (!b.isOver()) b.onOff();
-  }
+  for (Button b : btns) if (!b.isOver()) b.onOff();
+  for (Visual v : chart.vs) if (!v.isOver()) v.onOff();
 }

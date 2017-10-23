@@ -1,0 +1,21 @@
+comp177
+Vincent Tran, Charles Wan
+10/23/17
+
+Extra:
+1. In addition to bar/pie, also line/pie
+Reason: For completeness
+
+2. Labels and axes
+Reason: For completeness
+
+3. Button disabling
+Reason: For completeness, disallow awkward mid-transition behavior
+
+4. Tooltips
+Reason: Always helpful to be able to see the data values, and not just the
+visualizations, since they are only relative to each other.
+
+4. Animation speed scrollbar
+Reason: Be able to more clearly see transitions by slowing down, or speed things
+up otherwise.

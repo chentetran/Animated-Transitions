@@ -2,14 +2,10 @@ final float TICKLEN = 5;
 final int GAPS = 10;
 
 class BarChart extends Chart {
-  BarChart(DataTable _tbl, float _x, float _y, float _w, float _h) {
-    super(_tbl, _x, _y, _w, _h);
+  BarChart(DataTable _tbl, float _x, float _y, float _w, float _h, color _on, color _off) {
+    super(_tbl, _x, _y, _w, _h, _on, _off);
   }
-  
-  void makeShape() {
-    super.makeShape();
-  }
-  
+
   void makeVisuals() {
     vs.clear();
     stroke(0);
@@ -21,7 +17,7 @@ class BarChart extends Chart {
     for (int i = 0; i < tbl.data.size(); i++) {
       DataPoint pt = tbl.data.get(i);
       float rectHgt = pt.values.get(AXIS) * hgtRatio;
-      vs.add(new Bar(pt, xStart + gapSize * i, y + h - rectHgt, rectWid, rectHgt));
+      vs.add(new Bar(pt, xStart + gapSize * i, y + h - rectHgt, rectWid, rectHgt, on, off));
     }
   }
   
@@ -49,7 +45,7 @@ class BarChart extends Chart {
         txts.add(new TextInfo(tStr, x - TICKLEN - textWidth(tStr) - 5, tY + fontH / 2 - 3, 0, fontClr));
       }
       for (int j = 0; j < tbl.data.size(); j++) {
-        float labelX = x + ((j + 0.3) * w/tbl.data.size());
+        float labelX = x + ((j + 0.45) * w/tbl.data.size());
         float labelY = y + h + 10;
         txts.add(new TextInfo(tbl.data.get(j).label, labelX, labelY, PI / 4, fontClr));
       }

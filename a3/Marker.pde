@@ -1,13 +1,18 @@
 class Marker extends Visual {
-  Marker(DataPoint _pt, float _x, float _y, float _h, float _r) {
-    super(_pt, _x, _y);
+  Marker(DataPoint _pt, float _x, float _y, float _h, float _r, color _on, color _off) {
+    super(_pt, _x, _y, _on, _off);
     h = _h;
     r = _r;
     makeShape();
   }
   
   void makeShape() {
+    setColor();
     shape = createShape(ELLIPSE, x, y, r*2, r*2);
+  }
+  
+  boolean isOver() {
+    return pow(mouseX - x, 2) + pow(mouseY - y, 2) <= pow(r, 2);
   }
   
   void toBar(Visual bar, int i, int n) {

@@ -1,0 +1,13 @@
+comp177
+Vincent Tran, Charles Wan
+10/23/17
+
+Vincent (specific):
+- Line chart transitions
+- Buttons
+
+Charles (specific):
+- Pie chart transitions
+- Figuring out embellishment transitions
+
+Rest together

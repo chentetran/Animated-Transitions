@@ -1,8 +1,8 @@
 final float MRK_RADIUS = 5;
 
 class LineChart extends Chart {
-  LineChart(DataTable _tbl, float _x, float _y, float _w, float _h) {
-    super(_tbl, _x, _y, _w, _h);
+  LineChart(DataTable _tbl, float _x, float _y, float _w, float _h, color _on, color _off) {
+    super(_tbl, _x, _y, _w, _h, _on, _off);
   }
   
   private float getPtX(int i) {
@@ -27,7 +27,7 @@ class LineChart extends Chart {
     for (int i = 0; i < tbl.data.size(); i++) {
       float mY = getPtY(i, yMax);
       float mH = y + h - mY;
-      vs.add(new Marker(tbl.data.get(i), getPtX(i), mY, mH, MRK_RADIUS));
+      vs.add(new Marker(tbl.data.get(i), getPtX(i), mY, mH, MRK_RADIUS, on, off));
     }
   }
   
@@ -56,7 +56,7 @@ class LineChart extends Chart {
         txts.add(new TextInfo(tStr, x - TICKLEN - textWidth(tStr) - 5, tY + fontH / 2 - 3, 0, fontClr));
       }
       for (int j = 0; j < tbl.data.size(); j++) {
-        float labelX = x + ((j + 0.3) * w/tbl.data.size());
+        float labelX = x + ((j + 0.45) * w/tbl.data.size());
         float labelY = y + h + 10;
         txts.add(new TextInfo(tbl.data.get(j).label, labelX, labelY, PI / 4, fontClr));
       }
