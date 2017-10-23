@@ -1,16 +1,21 @@
 abstract class Chart {
   DataTable tbl;
   float x, y, w, h;
+  color on, off;
   ArrayList<Visual> vs;
   PShape shape = null;
   ArrayList<TextInfo> txts;
+  protected color c;
   
-  Chart(DataTable _tbl, float _x, float _y, float _w, float _h) {
+  Chart(DataTable _tbl, float _x, float _y, float _w, float _h, color _on, color _off) {
     tbl = _tbl;
     x = _x;
     y = _y;
     w = _w;
     h = _h;
+    on = _on;
+    off = _off;
+    c = _off;
     vs = new ArrayList<Visual>();
     txts = new ArrayList<TextInfo>();
     makeShape();
@@ -35,6 +40,7 @@ abstract class Chart {
   
   void makeShape() {
     fadeIn(10, 10);
+    for (Visual v : vs) v.makeShape();
   }
   
   void visualsToBars(Chart bchart, int i, int n) {

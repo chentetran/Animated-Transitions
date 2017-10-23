@@ -1,13 +1,19 @@
 class Bar extends Visual {
-  Bar(DataPoint _pt, float _x, float _y, float _w, float _h) {
-    super(_pt, _x, _y);
+  Bar(DataPoint _pt, float _x, float _y, float _w, float _h, color _on, color _off) {
+    super(_pt, _x, _y, _on, _off);
     w = _w;
     h = _h;
     makeShape();
   }
   
   void makeShape() {
+    setColor();
     shape = createShape(RECT, x, y, w, h);
+  }
+  
+  boolean isOver() {
+    return mouseX >= x && mouseX <= x + w &&
+           mouseY >= y && mouseY <= y + h;
   }
   
   void toBar(Visual bar, int i, int n) {

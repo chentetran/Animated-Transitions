@@ -1,6 +1,6 @@
 class Slice extends Visual {
-  Slice(DataPoint _pt, float _x, float _y, float _r, float _a1, float _a2) {
-    super(_pt, _x, _y);
+  Slice(DataPoint _pt, float _x, float _y, float _r, float _a1, float _a2, color _on, color _off) {
+    super(_pt, _x, _y, _on, _off);
     r = _r;
     a1 = _a1;
     a2 = _a2;
@@ -8,7 +8,15 @@ class Slice extends Visual {
   }
   
   void makeShape() {
+    setColor();
     shape = createShape(ARC, x, y, r*2, r*2, a1, a2, PIE);
+  }
+  
+  boolean isOver() {
+    boolean inCircle = pow(mouseX - x, 2) + pow(mouseY - y, 2) <= pow(r, 2);
+    float mouseRad = atan2(mouseY - y, mouseX - x);
+    mouseRad += mouseRad > 0 ? 0 : 2 * PI;
+    return inCircle && mouseRad > a1 && mouseRad < a2;
   }
   
   private void toPoly(Visual vert, int i, int n, float chordLen, float sx1, float sy1, float sx2, float sy2) {
