@@ -4,10 +4,11 @@ BarChart bchart = null;
 LineChart lchart = null;
 PieChart pchart = null;
 Button lastClicked = null;
+Scrollbar scrollbar = null;
 final int AXIS = 0;
 
 int i = 0;
-final int TFRAMES = 200;
+final int MAX_TFRAMES = 200;
 Chart target = null;
 
 final color BTN_ON = #64B5F6;
@@ -36,19 +37,24 @@ void setup() {
   btns.add(initialSelected);
   btns.add(new Button(0.8*width, 0.433*height, 0.1*width, 0.133*height, "Line Chart", BTN_ON, BTN_OFF, new ToLineChart()));
   btns.add(new Button(0.8*width, 0.766*height, 0.1*width, 0.133*height, "Pie Chart", BTN_ON, BTN_OFF, new ToPieChart()));
+  
+  scrollbar = new Scrollbar(0, height-16, width, 16, 30);
 }
 
 void draw() {
   background(255);
+  stroke(0);
   mouseOff();
   mouseOver();
   
   if (chart != null) {
-    if (chart != target) {
+    if (chart != target) {      // in transition
       transition();
+      scrollbar.setEnability(false);
     } else {
       chart.drawEmbellishments();
       chart.drawVisuals();
+      scrollbar.setEnability(true);
     }
   }
   for (Button b : btns) {
@@ -60,9 +66,10 @@ void draw() {
     
     b.draw();
   }
+  
+  scrollbar.update();
+  scrollbar.display();
 }
-
-
 
 void parseData(File f) {
   tbl = new DataTable(f.getAbsolutePath());
@@ -74,7 +81,9 @@ void parseData(File f) {
 }
 
 void transition() {
-  if (i > TFRAMES) {
+  int tframes = max(int((scrollbar.getPos()) * float(MAX_TFRAMES) / (width / 2)), 10);
+  println(tframes);
+  if (i > tframes) {
     i = 0;
     chart.makeVisuals(); // reset shapes
     chart = target;
@@ -82,22 +91,22 @@ void transition() {
     chart.drawVisuals();
     return;
   }
-  if (i <= TFRAMES / 2) {
-    chart.fadeOut(i, TFRAMES / 2);
+  if (i <= tframes / 2) {
+    chart.fadeOut(i, tframes / 2);
     chart.drawEmbellishments();
   } else {
-    target.fadeIn(i - TFRAMES / 2, TFRAMES / 2);
+    target.fadeIn(i - tframes / 2, tframes / 2);
     target.drawEmbellishments();
   }
   if (target == bchart) {
-    chart.visualsToBars(bchart, i, TFRAMES);
+    chart.visualsToBars(bchart, i, tframes);
   } else if (target == lchart) {
-    chart.visualsToMarkers(lchart, i, TFRAMES);
+    chart.visualsToMarkers(lchart, i, tframes);
   } else {
-    chart.visualsToSlices(pchart, i, TFRAMES);
+    chart.visualsToSlices(pchart, i, tframes);
   }
   chart.drawVisuals();
-  if (i <= TFRAMES) i++;
+  if (i <= tframes) i++;
 }
 
 void mouseClicked() {

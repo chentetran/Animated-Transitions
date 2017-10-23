@@ -48,6 +48,7 @@ class Button {
   }
   
   void draw() {
+    noStroke();
     if (enabled) fill(c);
     else fill(DISABLED);
     rect(x, y, w, h);

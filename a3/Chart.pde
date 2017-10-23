@@ -18,6 +18,7 @@ abstract class Chart {
   }
   
   void drawEmbellishments() {
+    fill(0);
     if (shape != null) shape(shape);
     for (TextInfo txt : txts) {
       fill(txt.c);
