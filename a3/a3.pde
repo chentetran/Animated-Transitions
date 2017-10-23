@@ -1,61 +1,106 @@
+DataTable tbl = null;
 Chart chart = null;
 BarChart bchart = null;
 LineChart lchart = null;
-final Transitions transitions = new Transitions();
-final int TNUM = 80;
+PieChart pchart = null;
+final int AXIS = 0;
 
 int i = 0;
-ArrayList<PShape> tFrames;
+final int TFRAMES = 200;
+Chart target = null;
+
+final color BTN_ON = color(100, 100, 100);
+final color BTN_OFF = color(200, 200, 200);
+ArrayList<Button> btns = new ArrayList<Button>(); // bar, line, pie
+
+class ToBarChart implements ButtonCallback {
+  void callback() { target = bchart; }
+}
+
+class ToLineChart implements ButtonCallback {
+  void callback() { target = lchart; }
+}
+
+class ToPieChart implements ButtonCallback {
+  void callback() { target = pchart; }
+}
 
 void setup() {
   size(1024, 768);
+  
   File f = new File("/home/charlw/Comp/comp177/a3/a3/data.csv");
-  //File f = new File("/Users/vincenttran/Desktop/Animated-Transitions/a3/data.csv");
   parseData(f);
-  //selectInput("Choose file to parse", "parseData");
-  //tFrames = transitions.barsToMarkers(bchart.dvs, lchart.dvs, TNUM);
-  tFrames = transitions.markersToBars(lchart.dvs, bchart.dvs, TNUM);
+  btns.add(new Button(0.8*width, 0.1*height, 0.1*width, 0.133*height, "Bar Chart", BTN_ON, BTN_OFF, new ToBarChart()));
+  btns.add(new Button(0.8*width, 0.433*height, 0.1*width, 0.133*height, "Line Chart", BTN_ON, BTN_OFF, new ToLineChart()));
+  btns.add(new Button(0.8*width, 0.766*height, 0.1*width, 0.133*height, "Pie Chart", BTN_ON, BTN_OFF, new ToPieChart()));
 }
-
-
 
 void draw() {
   background(255);
-  if (i < tFrames.size()-1) {
-    transitions.lineToBar(lchart, bchart, i, TNUM);
-    shape(tFrames.get(i));
-    i++;
-  } else {
-    transitions.lineToBar(lchart, bchart, TNUM, TNUM);
-    shape(tFrames.get(tFrames.size()-1));
+  mouseOff();
+  mouseOver();
+  
+  if (chart != null) {
+    if (chart != target) {
+      transition();
+    } else {
+      chart.drawEmbellishments();
+      chart.drawVisuals();
+    }
   }
-  //if (chart != null) {
-  //  chart.drawEmbellishments(0.5);
-  //  chart.drawData();
-  //}
-  
-  //drawButtons();
-}
-
-void drawButtons() {
-  float startingX = width / 6.0;
-  float startingY = height / 6.0;
-  color clickable = color(#add8e6);
-  color unclickable = color(#808080);
-  Button convertToBarChart = new Button(startingX, startingY, 100.0, 100.0, "Bar Chart", clickable, unclickable, null);
-  Button convertToLineChart = new Button(startingX, startingY, 100.0, 100, "Line Chart", clickable, unclickable, null);
-  Button convertToPieChart = new Button(startingX, startingY, 100.0, 100.0, "Pie Chart", clickable, unclickable, null);
-  convertToBarChart.draw();
-  convertToLineChart.draw();
-  convertToPieChart.draw();
-  
+  for (Button b : btns) b.draw();
 }
 
 void parseData(File f) {
-  DataTable tbl = new DataTable(f.getAbsolutePath());
-  bchart = new BarChart(tbl, 0.2*width, 0.2*height, 0.6*width, 0.6*height, color(0, 0, 0), color(255, 255, 255));
-  bchart.makeDataVizs();
-  lchart = new LineChart(tbl, 0.2*width, 0.2*height, 0.6*width, 0.6*height, color(0, 0, 0), color(255, 255, 255));
-  lchart.makeDataVizs();
+  tbl = new DataTable(f.getAbsolutePath());
+  bchart = new BarChart(tbl, 0.1*width, 0.2*height, 0.6*width, 0.6*height);
+  lchart = new LineChart(tbl, 0.1*width, 0.2*height, 0.6*width, 0.6*height);
+  pchart = new PieChart(tbl, 0.1*width, 0.2*height, 0.6*width, 0.6*height);
   chart = bchart;
+  target = bchart;
+}
+
+void transition() {
+  if (i > TFRAMES) {
+    i = 0;
+    chart.makeVisuals(); // reset shapes
+    chart = target;
+    chart.drawEmbellishments();
+    chart.drawVisuals();
+    return;
+  }
+  if (i <= TFRAMES / 2) {
+    chart.fadeOut(i, TFRAMES / 2);
+    chart.drawEmbellishments();
+  } else {
+    target.fadeIn(i - TFRAMES / 2, TFRAMES / 2);
+    target.drawEmbellishments();
+  }
+  if (target == bchart) {
+    chart.visualsToBars(bchart, i, TFRAMES);
+  } else if (target == lchart) {
+    chart.visualsToMarkers(lchart, i, TFRAMES);
+  } else {
+    chart.visualsToSlices(pchart, i, TFRAMES);
+  }
+  chart.drawVisuals();
+  if (i <= TFRAMES) i++;
+}
+
+void mouseClicked() {
+  for (Button b : btns) {
+    if (b.isOver()) b.onClick();
+  }
+}
+
+void mouseOver() {
+  for (Button b : btns) {
+    if (b.isOver()) b.onOver();
+  }
+}
+
+void mouseOff() {
+  for (Button b : btns) {
+    if (!b.isOver()) b.onOff();
+  }
 }

@@ -1,47 +1,48 @@
 interface ButtonCallback {
-  void buttonCallback();
+  void callback();
 }
 
 class Button {
-  float x,y, w, h;
+  float x, y, w, h;
   String text;
   color on, off;
   ButtonCallback buttonCallback;
   private color c;
   
-  Button(float x, float y, float w, float h, String text, color on, color off, ButtonCallback buttonCallback) {
-    this.x = x;
-    this.y = y;
-    this.w = w;
-    this.h = h;
-    this.on = on;
-    this.off = off;
-    this.text = text;
-    this.buttonCallback = buttonCallback;
-    this.c = this.off;
-  }
-  
-  void onClick() {
-    this.buttonCallback.buttonCallback();
-  }
-  
-  void onOver() {
-    this.c = this.on;
-  }
-  
-  void onOff() {
-    this.c = this.off;
-  }
-  
-  void draw() {
-    fill(this.c);
-    rect(x, y, w, h);
-    fill(0);
-    textAlign(CENTER, CENTER);
-    text(this.text, x + w / 2, y + h / 2);
+  Button(float _x, float _y, float _w, float _h, String _text, color _on, color _off, ButtonCallback _buttonCallback) {
+    x = _x;
+    y = _y;
+    w = _w;
+    h = _h;
+    text = _text;
+    on = _on;
+    off = _off;
+    buttonCallback = _buttonCallback;
+    c = off;
   }
   
   boolean isOver() {
-    return mouseX > this.x && mouseX < this.x + this.w && mouseY > this.y && mouseY < this.y + this.h;
+    return mouseX >= x && mouseX <= x + w &&
+           mouseY >= y && mouseY <= y + h;
+  }
+  
+  void onClick() {
+    buttonCallback.callback();
+  }
+  
+  void onOver() {
+    c = on;
+  }
+  
+  void onOff() {
+    c = off;
+  }
+  
+  void draw() {
+    fill(c);
+    rect(x, y, w, h);
+    fill(0);
+    textAlign(CENTER, CENTER);
+    text(text, x + w / 2, y + h / 2);
   }
 }
